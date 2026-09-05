@@ -2,26 +2,18 @@
 const jwt = require("jsonwebtoken")
 
 
-async function authenticateToken (req,res,next){
-    console.log("authentication function running==>",req.headers)
-   
-    const authHeader = req.headers.authorization
-    const token = authHeader && authHeader.split(" ")[1]
+const authenticateToken = (req, res, next) => {
+  const token = req.cookies.accessToken // requires cookie-parser middleware
+  if (!token) {
+    return res.status(401).json({ error: true, message: "Unauthorized" })
+  }
 
-    if(!token){
-        return res.sendStatus(401)
-    }
-
-    jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,user)=>{
-       if(err){
-            console.error("Token verification failed:", err.message)
-            return res.status(401).json({error:true,message:"Invalid or expired token"})
-        }
-
-        req.user = user
-        console.log("check the user befor next ==>",req.user)
-        next()
-    })
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    req.user = decoded
+    next()
+  } catch (err) {
+    return res.status(401).json({ error: true, message: "Invalid or expired token" })
+  }
 }
-
 module.exports = authenticateToken

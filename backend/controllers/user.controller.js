@@ -29,12 +29,19 @@ async function createUserController(req,res) {
  
      await user.save()
     
-    const accessToken = jwt.sign({userId:user._id},process.env.ACCESS_TOKEN_SECRET,{expiresIn:"3h"})
+    const token = jwt.sign({userId:user._id},process.env.ACCESS_TOKEN_SECRET,{expiresIn:"3h"})
+
+    res.cookie('accessToken', token, {
+  httpOnly: true,
+  secure: true , 
+  sameSite: 'none', 
+  maxAge: 3*60 * 60 * 1000 
+})
  
     return res.status(201).json({
      error:false,
      user:{fulllName:user.fullName,email:user.email,},
-     accessToken,
+    
      message:"Registration Successful"
     })
    } catch (error) {
@@ -67,13 +74,18 @@ async function loginUserController(req, res) {
             return res.status(400).json({ error: true, message: "Invalid credentials" })
         }
 
-        const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "3h" })
-
+        const token = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "3h" })
+        res.cookie('accessToken', token, {
+  httpOnly: true,
+  secure:true, 
+  sameSite: 'none',
+  maxAge: 3*60 * 60 * 1000 
+})
     
         return res.status(200).json({
             error: false,
             user: { fullName: user.fullName, email: user.email },
-            accessToken,
+           
             message: "Login Successful"
         })
 
@@ -97,6 +109,16 @@ async function getCurrnetUser(req,res) {
         message:"user fetch successful."
     })
     
+}
+
+
+async function logoutController(req, res) {
+  res.clearCookie('accessToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict'
+  })
+  res.status(200).json({ message: "Logged out successfully" })
 }
 
 
