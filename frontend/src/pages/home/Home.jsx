@@ -11,6 +11,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import { MdAdd } from "react-icons/md";
 import AddEditTravelSTrory from './AddEditTravelSTrory'
 import ViewTravelStory from './ViewTravelStory'
+import EmptyCard from '../../componet/EmptyCard'
+import { DayPicker } from '@daypicker/react'
+import moment from 'moment'
 
 const Home = () => {
 
@@ -27,6 +30,12 @@ const Home = () => {
     data:null
   })
 
+   const [searchQuery,setSearchQuery] = useState('')
+
+   const [dateRange, setDateRange] = useState({
+  from: null,
+  to: null
+})
 
 console.log("check the open add edit model ==>",openAddEditModal)
 
@@ -67,13 +76,84 @@ console.log("check the open add edit model ==>",openAddEditModal)
     }
   }
 
+  const deleteTravelStory = async(data)=>{
+    const storyId = data._id
+ try {
+
+        const response = await axiosInstance.delete(
+            `/delete-story/${storyId}`
+        );
+
+        if (response.data?.success) {
+
+            toast.success("Story deleted successfully");
+            setOpenViewModal((prevState)=>({...prevState,isShown:false}))
+            getAllStories();
+            
+        }
+
+    } catch (error) {
+
+        console.log("Error deleting story:", error);
+
+        toast.error("Unable to delete story");
+    }
+  }
+
+
+  const onSearchStory = async (search)=>{
+    try {
+      const response = await axiosInstance.get('/story/search',{
+        params:{
+          query:search
+        }
+      })
+      if(response.data && response.data.stories){
+        setAllStories(response.data.stories)
+      }
+    } catch (error) {
+      console.log('An unexpected error occurred . Please try again.')
+    }
+  }
+
+  const handleClearSearch = ()=>{
+    setSearchQuery('')
+    getAllStories()
+    
+  }
+
+
+const handleDateSelect = (range)=>{
+  setDateRange(range)
+   getStoriesByDateRange(range)
+}
+
+const getStoriesByDateRange = async (range)=>{
+  try {
+    const startDate = range.from ? moment(range.from).valueOf() : null
+    const endDate = range.to ? moment(range.to).valueOf() : null
+
+    if(startDate && endDate ){
+      const response = await axiosInstance.get('/story/travel-stories/filter',{
+        params:{startDate,endDate}
+      })
+
+      if(response.data && response.data.stories){
+        setAllStories(response.data.stories)
+      }
+    }
+  } catch (error) {
+    console.log('An unexpected error occurred . Please try again.')
+  }
+}
+
   useEffect(()=>{
     getAllStories()
   },[])
 
   return (
     <div>
-      <Navbar/>
+      <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} handleSearchStory={onSearchStory} handleClearSearch={handleClearSearch} />
       
       <div className='container mx-auto py-10'>
         <div className='flex gap-7'>
@@ -99,9 +179,21 @@ console.log("check the open add edit model ==>",openAddEditModal)
                 }
 
             </div>) : 
-            (<>Empty Card here. </>) }
+            (<> <EmptyCard/> </>) }
           </div>
-          <div className='w-[320px]'></div>
+          <div className='w-[320px]'> 
+            <div className="bgpwhite border border-slate-300 shadow-lg shadow-slate-200 rounded-lg ">
+              <div className='p-3'>
+                <DayPicker 
+                  mode='range'
+                 captionLayout='dropdown-button'
+                  selected={dateRange}
+                  onSelect={handleDateSelect}
+                  
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -138,9 +230,7 @@ console.log("check the open add edit model ==>",openAddEditModal)
         >
           <ViewTravelStory  storyInfo={openViewModal.data || null}
            onClose={()=>{setOpenViewModal((prevState)=>({...prevState,isShown:false}))}}
-           onDeleteClick={()=>{
-            
-           }} 
+           onDeleteClick={()=>{deleteTravelStory(openViewModal.data || null) }} 
 
           onEditClick={()=>{
             setOpenViewModal((prevState)=>({...prevState,isShown:false}))

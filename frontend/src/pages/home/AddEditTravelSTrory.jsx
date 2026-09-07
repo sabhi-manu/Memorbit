@@ -144,29 +144,9 @@ const AddEditTravelSTrory = ({
     }
   };
 
-const handleDeleteStory = async () => {
+// const handleDeleteStory = async () => {
 
-    try {
-
-        const response = await axiosInstance.delete(
-            `/delete-story/${storyInfo._id}`
-        );
-
-        if (response.data?.success) {
-
-            toast.success("Story deleted successfully");
-
-            getAllTRavelStories();
-            onClose();
-        }
-
-    } catch (error) {
-
-        console.log("Error deleting story:", error);
-
-        toast.error("Unable to delete story");
-    }
-};
+// };
 
   return (
     <div className="relative">
@@ -191,10 +171,10 @@ const handleDeleteStory = async () => {
                   <MdUpdate className="text-lg" /> UPDATE STORY
                 </button>
 
-                <button className="btn-small btn-delete" onClick={handleDeleteStory}>
+                {/* <button className="btn-small btn-delete" onClick={handleDeleteStory}>
                   {" "}
                   <MdDeleteOutline className="text-lg" /> DELETE
-                </button>
+                </button> */}
               </>
             )}
             <button className="" onClick={onClose}>
