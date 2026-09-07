@@ -1,1 +1,34 @@
 @import "tailwindcss";
+
+
+.rdp-root{
+   --rdp-accent-color: #01b0cb;
+    --rdp-accent-background-color: #dffbff;
+    --rdp-day_button-border-radius: 8px;
+    
+}
+
+@layer components {
+  .login-ui-box {
+    @apply w-80 h-[450px] rounded-full bg-cyan-200 absolute rotate-45;
+  }
+
+  .icon-btn {
+    @apply text-[22px] cursor-pointer;
+  }
+
+  .model-box{
+    @apply w-[80vw] md:w-[50%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-5 overflow-y-scroll  z-50
+  }
+
+  .btn-small{
+    @apply flex items-center gap-1 text-xs font-medium bg-cyan-50 text-cyan-500 shadow-cyan-100/0 border border-cyan-100  hover:bg-cyan-400 hover:text-white  rounded px-3 py-2
+  }
+  .btn-delete {
+    @apply bg-rose-50 text-rose-500 shadow-rose-100 border border-rose-100 hover:bg-rose-500 hover:text-white
+  }
+
+  .input-label {
+    @apply text-xs text-slate-800
+  }
+}

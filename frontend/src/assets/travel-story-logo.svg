@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+  <title id="title">Travel Story logo</title>
+  <desc id="desc">A navy and turquoise travel logo with an airplane, flight path and palm tree.</desc>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Flight path -->
+    <path d="M105 105 C175 35, 300 45, 365 90 S505 145, 565 75"
+          stroke="#16A9D8" stroke-width="7" stroke-dasharray="14 14"/>
+
+    <!-- Airplane -->
+    <path d="M560 57 l48 -18 8 8 -34 25 19 13 -7 9 -27 -8 -21 17 -8 -7 17 -25 -16 -19 7 -8 19 15z"
+          fill="#16A9D8" stroke="#16A9D8"/>
+
+    <!-- Decorative rays -->
+    <path d="M88 210 l-20 10 M98 230 l-17 18 M115 245 l-10 22"
+          stroke="#123F88" stroke-width="7"/>
+
+    <!-- Palm tree -->
+    <path d="M745 274 C750 230, 756 192, 760 155" stroke="#16A9D8" stroke-width="8"/>
+    <path d="M760 160 C735 137, 705 132, 675 141
+             M760 160 C778 129, 806 116, 837 119
+             M760 160 C795 151, 824 160, 846 180
+             M760 160 C742 123, 744 96, 760 72
+             M760 160 C776 105, 798 83, 824 72"
+          stroke="#16A9D8" stroke-width="8"/>
+
+    <!-- Island -->
+    <path d="M710 278 C742 268, 790 268, 827 279
+             C800 284, 742 286, 710 278z"
+          fill="#16A9D8" stroke="#16A9D8"/>
+  </g>
+
+  <!-- Main wordmark -->
+  <text x="90" y="175"
+        font-family="Brush Script MT, Segoe Script, cursive"
+        font-size="112"
+        font-weight="700"
+        fill="#123F88">Travel</text>
+
+  <text x="230" y="285"
+        font-family="Brush Script MT, Segoe Script, cursive"
+        font-size="120"
+        font-weight="700"
+        fill="#16A9D8">Story</text>
+
+  <!-- Underline -->
+  <path d="M235 305 C355 326, 500 321, 635 296"
+        fill="none" stroke="#16A9D8" stroke-width="8" stroke-linecap="round"/>
+</svg>
