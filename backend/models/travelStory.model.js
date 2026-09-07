@@ -1,38 +1,44 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const travelStorySchema = new mongoose.Schema({
-    title:{
-        type:String,
-        required:true
+const travelStorySchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
     },
-    story:{
-        type:String,
-        required:true
+    story: {
+      type: String,
+      required: true,
     },
-    visitedLocation:{
-        type:[String],
-        default:[]
+    visitedLocation: {
+      type: [String],
+      default: [],
     },
-    isFavourite:{
-        type:Boolean,
-        default:false
+    isFavourite: {
+      type: Boolean,
+      default: false,
     },
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        required:true
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    visitedDate:{
-        type:Date,
-       required:true
+    visitedDate: {
+      type: Date,
+      required: true,
     },
-    imageUrl:{
-        type:String,
-        required:true
-    }
-},{timestamps:true})
+    imageUrl: {
+      type: String,
+      required: true,
+    },
+    imageKey: {
+      type: String,
+      default: "",
+    },
+  },
+  { timestamps: true },
+);
 
+const TravelStory = mongoose.model("TravelStory", travelStorySchema);
 
-const TravelStory = mongoose.model("TravelStory", travelStorySchema)
-
-module.exports = TravelStory
+module.exports = TravelStory;
