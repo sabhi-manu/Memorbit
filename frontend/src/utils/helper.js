@@ -14,3 +14,18 @@ export  function getInitialsLater (name){
 
     return initials.toUpperCase()
 }
+
+
+export const getEmptyCardMessage = (filterType)=>{
+    switch (filterType) {
+        case 'search':
+            return `Oops ! NO Stories found Matching your Search.`
+           
+        case 'date':
+            return `No Stories found in the given Date Range`
+    
+        default:
+            return ` You haven't added any travel stories yet.
+        Start documenting your adventures and create your first travel story!`
+    }
+}
