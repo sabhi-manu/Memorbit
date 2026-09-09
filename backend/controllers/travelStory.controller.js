@@ -6,15 +6,16 @@ const {
 const TravelStory = require("../models/travelStory.model");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const s3client = require("../configs/awsS3.config");
+const generateSignedUrl = require("../configs/generateSignedUrl");
 
 async function createStoryController(req, res) {
-  const { title, story, visitedLocation, visitedDate, imageUrl, imageKey } =
+  const { title, story, visitedLocation, visitedDate, imageKey } =
     req.body;
   const { userId } = req.user;
   console.log("user id ==>", userId);
 
   try {
-    if (!title || !story || !imageUrl || !visitedLocation || !visitedDate) {
+    if (!title || !story || !imageKey || !visitedLocation || !visitedDate) {
       return res.status(400).json({
         error: true,
         message: "All fields are required",
@@ -28,7 +29,7 @@ async function createStoryController(req, res) {
       story,
       visitedLocation,
       visitedDate: parseVisitedDate,
-      imageUrl,
+      // imageUrl,
       userId,
       imageKey,
     });
@@ -53,9 +54,18 @@ async function getTravelStoryController(req, res) {
     const travelStories = await TravelStory.find({ userId }).sort({
       isFavourite: -1,
     });
+
+    const storiesWithUrls = await Promise.all(
+      travelStories.map(async (story)=>{
+        const signUrl = await generateSignedUrl(story.imageKey)
+        return {...story.toObject(),imageUrl:signUrl}
+      })
+    )
+
+
     res.status(200).json({
       message: "stories fetched successfully.",
-      stories: travelStories,
+      stories: storiesWithUrls,
     });
   } catch (error) {
     console.log("Error while getting all story  ==>", error);
@@ -74,7 +84,6 @@ async function uploadImageController(req, res) {
         .json({ error: true, message: "No image uploaded" });
     }
     const fileName = `travel-stories/${Date.now()}-${req.file.originalname}`;
-
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_BUCKET_NAME,
       Key: fileName,
@@ -84,16 +93,20 @@ async function uploadImageController(req, res) {
 
     await s3client.send(command);
 
-    const getCommand = new GetObjectCommand({
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: fileName,
-    });
+    console.log("image upload successful.",fileName)
 
-    const url = await getSignedUrl(s3client, getCommand);
+    // const getCommand = new GetObjectCommand({
+    //   Bucket: process.env.AWS_BUCKET_NAME,
+    //   Key: fileName,
+    // });
+
+    // const url = await getSignedUrl(s3client, getCommand);
+
+    const previewUrl = await generateSignedUrl(fileName);
 
     res.status(200).json({
       message: "image upload successfully.",
-      imageUrl: url,
+      imageUrl: previewUrl,
       key: fileName,
     });
   } catch (error) {
@@ -133,11 +146,11 @@ async function deleteingImageController(req, res) {
   }
 }
 
+
 async function updateStoryController(req, res) {
   try {
     const { id } = req.params;
-    const { title, story, visitedLocation, visitedDate, imageUrl, imageKey } =
-      req.body;
+    const { title, story, visitedLocation, visitedDate, imageKey } = req.body;
     const { userId } = req.user;
 
     if (!title || !story || !visitedLocation || !visitedDate) {
@@ -152,9 +165,7 @@ async function updateStoryController(req, res) {
     const travelStory = await TravelStory.findOne({ _id: id, userId: userId });
 
     if (!travelStory) {
-      return res
-        .status(404)
-        .json({ error: true, message: "Travel story not found." });
+      return res.status(404).json({ error: true, message: "Travel story not found." });
     }
 
     const oldImageKey = travelStory.imageKey;
@@ -162,8 +173,7 @@ async function updateStoryController(req, res) {
     travelStory.title = title;
     travelStory.story = story;
     travelStory.visitedLocation = visitedLocation;
-    travelStory.imageUrl = imageUrl || process.env.DEFAULT_IMAGE_KEY;
-    travelStory.imageKey = imageKey || "";
+    travelStory.imageKey = imageKey || process.env.DEFAULT_IMAGE_KEY;
     travelStory.visitedDate = parseVisitedDate;
 
     await travelStory.save();
@@ -178,13 +188,14 @@ async function updateStoryController(req, res) {
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: oldImageKey,
       });
-
       await s3client.send(command);
     }
 
+    const signedUrl = await generateSignedUrl(travelStory.imageKey);
+
     res.status(200).json({
-      message: "story  update successfully.",
-      story: travelStory,
+      message: "story update successfully.",
+      story: { ...travelStory.toObject(), imageUrl: signedUrl },
     });
   } catch (error) {
     console.log("Error while update story  ==>", error);
