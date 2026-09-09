@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import signUp_image from '../../assets/signUp_image.png'
 import { UseAuth } from '../../context/authContext'
 import { signupApi } from './auth.api'
-
+import {toast} from "react-toastify"
 
 
 const SignUp = () => {
   const navigate = useNavigate()
   const {setUserFunction} = UseAuth()
 
-  const [userName,setUserName] = useState('')
+  const [fullName,setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -22,7 +22,7 @@ const SignUp = () => {
     e.preventDefault()
     setError('')
 
-    if (!email || !password || !userName) {
+    if (!email || !password || !fullName) {
       setError('Fields  are required.')
       return
     }
@@ -35,17 +35,20 @@ const SignUp = () => {
     try {
       setLoading(true)
     
-      console.log('login handler', { userName,email, password })
+      console.log('login handler', { fullName,email, password })
 
-      const data = await signupApi({userName,email,password})
+      const data = await signupApi({fullName,email,password})
+      console.log('check the response of api create user ==>',data)
       setUserFunction(data.user)
-
+      toast.success("User Register successfully.")
       navigate("/dashboard")
     
     } catch (err) {
+      console.log("error occure in create user function signup ===>",err)
       setError(
         err?.response?.data?.message || 'Something went wrong. Please try again.'
       )
+      toast.error("Something went wrong. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -77,16 +80,16 @@ const SignUp = () => {
               )}
 
               <div className="flex flex-col gap-1">
-                <label htmlFor="userName" className="text-sm font-medium text-gray-700">
+                <label htmlFor="fullName" className="text-sm font-medium text-gray-700">
                   User Name
                 </label>
                 <input
                   type="text"
-                  name="userName"
-                  id="userName"
-                  placeholder="userName"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
+                  name="fullName"
+                  id="fullName"
+                  placeholder="fullName"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                   className="border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition"
                 />
               </div>

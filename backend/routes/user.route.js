@@ -7,7 +7,7 @@ const route = express.Router()
 
 route.post("/create-user", userController.createUserController)
 route.post("/login", userController.loginUserController)
-
+route.post("/logout",userController.logoutController)
 route.get("/get-user",authenticateToken,userController.getCurrnetUser)
 
 

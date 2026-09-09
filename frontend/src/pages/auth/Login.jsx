@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import login_image from '../../assets/login_image.png'
 import { loginApi } from './auth.api'
 import { UseAuth } from '../../context/authContext'
-
+import {toast} from "react-toastify"
 
 
 const Login = () => {
   const navigate = useNavigate()
-  // const {setUserFunction} = UseAuth()
+  const {setUserFunction} = UseAuth()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -37,13 +37,20 @@ const Login = () => {
       console.log('login handler', { email, password })
       
      const data = await loginApi({email,password})
-      // setUserFunction(data.user)
-      navigate("/dashboard")
+     console.log('check the response login user ==>',data)
+     if(data && data.user){
+
+       setUserFunction(data.user)
+      toast.success("User Login successfully")
+       navigate("/dashboard")
+     }
 
     } catch (err) {
+      console.log('error while register user ==>',err.message)
       setError(
         err?.response?.data?.message || 'Something went wrong. Please try again.'
       )
+      toast.error("Something went wrong. Please try again.")
     } 
     finally {
       setLoading(false)

@@ -2,7 +2,7 @@ import axiosInstance from "../../utils/axiosInstance";
 
 
  export async function signupApi (data){
-    const response = await axiosInstance.post("/user/signup",data)
+    const response = await axiosInstance.post("/user/create-user",data)
     console.log("check the signup response data ==>",response)
     return response.data
 }

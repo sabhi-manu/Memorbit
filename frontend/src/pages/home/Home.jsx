@@ -16,9 +16,12 @@ import { DayPicker } from "@daypicker/react";
 import moment from "moment";
 import FilterInfoTitle from "../../componet/FilterInfoTitle";
 import { getEmptyCardMessage } from "../../utils/helper";
+import { UseAuth } from "../../context/authContext";
 
 const Home = () => {
   const [allStories, setAllStories] = useState(dummyStories);
+  const {user} = UseAuth()
+  console.log('check the user in home page ==>',user)
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShow: false,
