@@ -18,8 +18,8 @@ const DateSelector = ({date,setDate}) => {
 
        { openDatePicker &&  <div className='overflow-y-scroll p-5 bg-sky-200 rounded-lg relative pt-9'>
 
-            <button className='w-10 h-10 rounded-full flex items-center justify-center bg-sky-100 hover:bg-sky-100 absolute top-2 right-3 ' onClick={()=>{setOpenDatePicker(false)}} >
-                <MdClose className='text-xl text-sky-600' />               
+            <button className='w-10 h-10 rounded-full flex items-center justify-center bg-sky-100 hover:bg-sky-100 absolute top-2 right-3 cursor-pointer hover:bg-sky-400 ' onClick={()=>{setOpenDatePicker(false)}} >
+                <MdClose className='text-xl text-sky-600 hover:text-black' />               
             </button>
 
             <DayPicker 

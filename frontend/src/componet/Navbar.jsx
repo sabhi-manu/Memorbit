@@ -5,10 +5,11 @@ import {useNavigate} from 'react-router-dom'
 import axiosInstance from '../utils/axiosInstance'
 import { toast } from 'react-toastify'
 import SearchBar from './SearchBar'
+import { UseAuth } from '../context/authContext'
 
 const Navbar = ({searchQuery,setSearchQuery,handleSearchStory,handleClearSearch}) => {
     const navigate = useNavigate()
-   
+   const {user,setUserFunction} = UseAuth()
 
   const userInfo = {
     name:'manu kumar'
@@ -17,9 +18,10 @@ const Navbar = ({searchQuery,setSearchQuery,handleSearchStory,handleClearSearch}
   const onLogout = async ()=>{
     console.log('logout function call ....')
    try {
-    const response = await axiosInstance.delete(`/user/logout`)
-    
-    if(response.data && response.data.success){
+    const response = await axiosInstance.post(`/user/logout`)
+    console.log("check response logout ==>",response)
+    if(response && response.status == 200){
+      setUserFunction(null)
       toast.success('User Logout successfully.')
       navigate('/login')
     }
@@ -50,7 +52,7 @@ const Navbar = ({searchQuery,setSearchQuery,handleSearchStory,handleClearSearch}
         onClearSearch ={onCleaerSearch}
         />
 
-        <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+        <ProfileInfo userInfo={user} onLogout={onLogout} />
     </div>
   )
 }

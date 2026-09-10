@@ -4,7 +4,7 @@ import { GrMapLocation } from "react-icons/gr";
 import { FaHeart } from "react-icons/fa";
 
 const TravelStoryCard = ({
-  imageUrl,title,story,date,visitedLocation,isFavourite,onEdit,onClick,onFavouriteClick
+  imageUrl,title,story,date,visitedLocation,isFavourite,onClick,onFavouriteClick
 }) => {
   return (
     <div className=' border rounded-lg overflow-hidden bg-white hover:shadow-slate-200 transition-all ease-in-out relative cursor-pointer '>

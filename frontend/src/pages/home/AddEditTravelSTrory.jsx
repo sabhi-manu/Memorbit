@@ -15,7 +15,7 @@ const AddEditTravelSTrory = ({
   getAllTRavelStories,
 }) => {
 
-  console.log('check the story info when type edit ==>',storyInfo)
+  // console.log('check the story info when type edit ==>',storyInfo)
 
 
   const [title, setTitle] = useState(storyInfo?.title || "");
@@ -35,22 +35,33 @@ const AddEditTravelSTrory = ({
 
       if (storyImg) {
         const imageUploadRes = await uploadImage(storyImg);
-
+        console.log("image upload response in add travel story ==>",imageUploadRes)
         imageUrl = imageUploadRes.imageUrl || "";
         imageKey = imageUploadRes.key || "";
       }
 
-      const response = await axiosInstance.post("/add-travel-story", {
-        title,
+      console.log("check data of story ==>", title,
         story,
         imageUrl,
         imageKey,
         visitedLocation,
+        visitedDate
+      )
+
+
+      const response = await axiosInstance.post("/story/add-travel-story", {
+        title,
+        story,
+        // imageUrl,
+        imageKey,
+        visitedLocation,
         visitedDate: visitedDate
           ? moment(visitedDate).valueOf()
-          : moment.valueOf(),
+          : moment().valueOf(),
       });
 
+      console.log("check the response story created ===>",response)
+      
       if (response.data && response.data.story) {
         toast.success("Story Addedd Successfully");
 
@@ -92,9 +103,8 @@ const AddEditTravelSTrory = ({
                 : moment().valueOf(),
         };
 
-
     const response = await axiosInstance.put(
-            `/edit-story/${storyId}`,
+            `story/edit-story/${storyId}`,
             postData
         );
 

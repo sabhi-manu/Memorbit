@@ -3,11 +3,11 @@ import React from "react";
 import { MdOutlineClose } from "react-icons/md";
 
 const FilterInfoTitle = ({ filterType, filterDate, onClear,searchQuery }) => {
-  console.log("check the filter type component data ==>", filterType);
+  // console.log("check the filter type component data ==>", filterType);
 
 
   const DateRangeChip = ({date})=>{
-console.log("check the date function ==>",date)
+// console.log("check the date function ==>",date)
 const startDate = date?.from ? moment(date?.from).format("Do MMM YYYY"):"N/A"
 const endDate = date?.to ? moment(date?.to).format("Do MMM YYYY"):"N/A"
 

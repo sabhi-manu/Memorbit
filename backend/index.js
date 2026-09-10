@@ -1,5 +1,6 @@
 const dotenv = require("dotenv")
 dotenv.config()
+console.log("SIGNED_URL_EXPIRY from env:", process.env.SIGNED_URL_EXPIRY);
 const express = require("express")
 const cors = require("cors")
 const connectDB = require("./configs/database")

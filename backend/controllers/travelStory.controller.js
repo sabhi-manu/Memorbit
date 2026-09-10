@@ -302,9 +302,18 @@ async function searchStoryController(req, res) {
       ],
     }).sort({ isFavourite: -1 });
 
+    const storiesWithUrl = await Promise.all(
+      searchResult.map(async(story)=>{
+       const imageUrl = await generateSignedUrl(story.imageKey)
+        return {...story.toObject(),imageUrl:imageUrl}
+      })
+    )
+
+    console.log("check imageUrl =>",storiesWithUrl)
+
     res.status(200).json({
       message: "Query stories successfully.",
-      stories: searchResult,
+      stories: storiesWithUrl,
     });
   } catch (error) {
     console.log("Error while searhing story ==>", error);
@@ -328,9 +337,16 @@ async function storyByDateController(req, res) {
       visitedDate: { $gte: start, $lte: end },
     }).sort({ isFavourite: -1 });
 
+    const storiesWithUrl = await Promise.all(
+       filteredStories.map(async (story)=>{
+        const imageUrl = await generateSignedUrl(story.imageKey)
+        return {...story.toObject(),imageUrl:imageUrl}
+       })
+    )
+
     res.status(200).json({
       message: "Query stories successfully.",
-      stories: filteredStories,
+      stories: storiesWithUrl,
     });
   } catch (error) {
     console.log("Error while searhing by date ==>", error);

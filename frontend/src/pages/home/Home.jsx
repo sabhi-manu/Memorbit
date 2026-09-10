@@ -7,7 +7,7 @@ import { isFavouriteHandler } from "./homeApi";
 
 import Modal from "react-modal";
 
-import { ToastContainer, toast } from "react-toastify";
+// import { ToastContainer, toast } from "react-toastify";
 import { MdAdd } from "react-icons/md";
 import AddEditTravelSTrory from "./AddEditTravelSTrory";
 import ViewTravelStory from "./ViewTravelStory";
@@ -17,11 +17,12 @@ import moment from "moment";
 import FilterInfoTitle from "../../componet/FilterInfoTitle";
 import { getEmptyCardMessage } from "../../utils/helper";
 import { UseAuth } from "../../context/authContext";
+import {toast} from "react-toastify"
 
 const Home = () => {
   const [allStories, setAllStories] = useState(dummyStories);
   const {user} = UseAuth()
-  console.log('check the user in home page ==>',user)
+  // console.log('check the user in home page ==>',user)
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShow: false,
@@ -43,11 +44,12 @@ const Home = () => {
 
   const [searchFilterType, setSearchFilterType] = useState("");
 
-  console.log("check the open add edit model ==>", openAddEditModal);
+  // console.log("check the open add edit model ==>", openAddEditModal);
 
   async function getAllStories() {
     try {
       const resp = await axiosInstance.get("/story/get-all-stories");
+      console.log("get all stories ==>",resp.data)
       if (resp && resp.data.stories) {
         setAllStories(resp.data.stories);
       }
@@ -60,20 +62,21 @@ const Home = () => {
   }
 
   const handleEdit = (data) => {
-    console.log("handle edit function...", data);
+    // console.log("handle edit function...", data);
     setOpenAddEditModal({ isShow: true, type: "edit", data: data });
   };
 
   const handleViewStroy = (data) => {
-    console.log("handle view story function. data...", data);
+    // console.log("handle view story function. data...", data);
     setOpenViewModal({ isShown: true, data });
   };
 
   // toggle the favourite story.
   const updateIsFavourite = async (storyData) => {
-    console.log("update favourite function...");
+    // console.log("update favourite function...");
     try {
       const response = await isFavouriteHandler(storyData);
+      console.log("check the response of favourite toggle ==>",response)
       if (response && response.story) {
         toast.success("Story Update successfully");
         getAllStories();
@@ -86,9 +89,9 @@ const Home = () => {
   const deleteTravelStory = async (data) => {
     const storyId = data._id;
     try {
-      const response = await axiosInstance.delete(`/delete-story/${storyId}`);
+      const response = await axiosInstance.delete(`story/delete-story/${storyId}`);
 
-      if (response.data?.success) {
+      if (response.status == 200) {
         toast.success("Story deleted successfully");
         setOpenViewModal((prevState) => ({ ...prevState, isShown: false }));
         getAllStories();
@@ -151,7 +154,7 @@ const Home = () => {
   };
 
   const resetFilter = () => {
-    console.log("clear search filter function ==>");
+    // console.log("clear search filter function ==>");
     setSearchFilterType("");
     setSearchQuery("");
     setDateRange({ from: null, to: null });
@@ -254,7 +257,7 @@ const Home = () => {
         onRequestClose={() => {}}
         style={{
           overlay: {
-            backgroundColor: "rgba(0,0,0,0.2",
+            backgroundColor: "rgba(0,0,0,0.2)",
             zIndex: 999,
           },
         }}
@@ -284,7 +287,7 @@ const Home = () => {
         <MdAdd className="text-[32px] text-gray-600  " />
       </button>
 
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </div>
   );
 };
