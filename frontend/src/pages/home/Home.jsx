@@ -20,7 +20,7 @@ import { UseAuth } from "../../context/authContext";
 import {toast} from "react-toastify"
 
 const Home = () => {
-  const [allStories, setAllStories] = useState(dummyStories);
+  const [allStories, setAllStories] = useState([]);
   const {user} = UseAuth()
   // console.log('check the user in home page ==>',user)
 
