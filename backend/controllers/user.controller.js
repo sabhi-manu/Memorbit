@@ -39,7 +39,7 @@ async function createUserController(req, res) {
     res.cookie("accessToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production"?"node":"lax",
+      sameSite: process.env.NODE_ENV === "production"?"none":"lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -90,7 +90,7 @@ async function loginUserController(req, res) {
     res.cookie("accessToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production"?"node":"lax",
+      sameSite: process.env.NODE_ENV === "production"?"none":"lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -135,7 +135,7 @@ async function logoutController(req, res) {
   res.clearCookie("accessToken",  res.cookie("accessToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production"?"node":"lax",
+      sameSite: process.env.NODE_ENV === "production"?"none":"lax",
       
     }));
 
