@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import signUp_image from '../../assets/signUp_image.png'
+import signUp_image from '../../assets/signup_image.png'
 import { UseAuth } from '../../context/authContext'
 import { signupApi } from './auth.api'
 import {toast} from "react-toastify"
