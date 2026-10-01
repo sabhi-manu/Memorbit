@@ -133,7 +133,14 @@ async function getCurrnetUser(req, res) {
 
 async function logoutController(req, res) {
   console.log("check logout function working....")
-  res.clearCookie("accessToken");
+  const isProd = process.env.NODE_ENV === "production";
+
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
+    path: "/",
+  });
 
   res.status(200).json({ message: "Logged out successfully" });
 }
