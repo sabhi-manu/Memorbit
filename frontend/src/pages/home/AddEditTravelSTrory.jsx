@@ -69,10 +69,13 @@ const AddEditTravelSTrory = ({
         onClose();
       }
     } catch (error) {
-      console.log("Error while add new travel story :", error);
-      if(error.response && error.response.data && error.response.data.message){
-        setError('An Unexpected error occurred . Please try again.')
-      }
+      console.log("Error while adding new travel story:", error);
+
+  const errorMessage =
+    error.response?.data?.message ||
+    "An unexpected error occurred. Please try again.";
+
+  toast.error(errorMessage);
     }
   };
 
@@ -116,10 +119,13 @@ const AddEditTravelSTrory = ({
             onClose();
         }
     } catch (error) {
-      console.log("Error while add new travel story :", error);
-      if(error.response && error.response.data && error.response.data.message){
-        setError('An Unexpected error occurred . Please try again.')
-      }
+      console.log("Error while updating travel story:", error);
+
+  const errorMessage =
+    error.response?.data?.message ||
+    "An unexpected error occurred. Please try again.";
+
+  toast.error(errorMessage);
     }
    };
 

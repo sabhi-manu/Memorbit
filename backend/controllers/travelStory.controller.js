@@ -15,7 +15,9 @@ async function createStoryController(req, res) {
   console.log("user id ==>", userId);
 
   try {
-    if (!title || !story || !imageKey || !visitedLocation || !visitedDate) {
+      const finalImageKey = imageKey || process.env.DEFAULT_IMAGE_KEY;
+
+    if (!title || !story || !finalImageKey || !visitedLocation || !visitedDate) {
       return res.status(400).json({
         error: true,
         message: "All fields are required",
@@ -31,7 +33,7 @@ async function createStoryController(req, res) {
       visitedDate: parseVisitedDate,
       // imageUrl,
       userId,
-      imageKey,
+      imageKey:finalImageKey,
     });
     await travelStory.save();
 
